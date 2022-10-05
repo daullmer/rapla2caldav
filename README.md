@@ -10,10 +10,13 @@ The DHBW Stuttgart is hosting an OwnCloud which you could use as a CalDav instan
 To get the Rapla Link, copy the key inside the URL provided to you by the secretary.
 
 If you have created a file with the environment variables, you can run the container like this:
+
 ```docker run --name rapla2caldav --env-file env.secrets ghcr.io/daullmer/rapla2caldav```
 
 The container will start and do an initial sync. To run in periodically, you can start the container every hour with the following cron job:
+
 ```0 7-19 * * *    username docker start rapla2caldav```
+
 It will start the container every hour between 7 and 19 o'clock. Outside these hours, it is very unlikely that your schedule will change.
 
 ## Get a sharable URL of the calendar

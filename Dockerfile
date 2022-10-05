@@ -1,5 +1,5 @@
 # Part 1: Build the app using Maven
-FROM maven:3.6.0-jdk-8-alpine
+FROM maven:3-eclipse-temurin-17
 
 ## download dependencies
 ADD pom.xml /
@@ -9,7 +9,7 @@ ADD . /
 RUN mvn package
 
 # Part 2: use the JAR file used in the first part and copy it across ready to RUN
-FROM openjdk:8-jdk-alpine
+FROM openjdk:11
 WORKDIR /root/
 ## COPY packaged JAR file and rename as app.jar
 ## → this relies on your MAVEN package command building a jar

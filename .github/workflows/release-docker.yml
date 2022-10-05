@@ -51,7 +51,7 @@ jobs:
         with:
           context: .
           push: true
-          platforms: linux/amd64,linux/arm64,linux/arm
+          platforms: linux/amd64,linux/arm64
           tags: |
             ghcr.io/daullmer/rapla2caldav:stable-rc
             ghcr.io/daullmer/rapla2caldav:stable-rc.${{ github.event.release.tag_name }}

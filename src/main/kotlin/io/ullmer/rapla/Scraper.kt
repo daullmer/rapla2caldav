@@ -36,12 +36,14 @@ class Scraper(url: String?) {
                 val dateOfLecture = firstDateOfWeek!!.plusDays(numberOfDaysFromMonday(dayOfTheWeek).toLong())
                 val isKlausur: Boolean = element.attributes()["style"] == "background-color:#F79F81"
                 val title = getTitleFromElement(element)
+                val location = getLocationFromElement(element)
                 val lecture = Lecture(
                     title,
                     getLecturerFromElement(element),
                     times[0],
                     times[1],
                     dateOfLecture,
+                    location,
                     isKlausur
                 )
                 lecture.cleanName()
@@ -100,6 +102,14 @@ class Scraper(url: String?) {
     private fun getTitleFromElement(element: Element): String {
         return element.select("a[href^=#]").text().split(" erstellt am".toRegex()).dropLastWhile { it.isEmpty() }
             .toTypedArray()[0].substring(13)
+    }
+
+    private fun getLocationFromElement(element: Element): String {
+        val resources = element.select("span.resource")
+        if (resources.count() != 2) {
+            return "Online"
+        }
+        return resources[1].text()
     }
 
     private fun getLecturerFromElement(element: Element): String {

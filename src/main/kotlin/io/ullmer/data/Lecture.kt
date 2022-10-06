@@ -8,7 +8,8 @@ class Lecture(
     val lecturer: String,
     val startTime: LocalTime,
     val endTime: LocalTime,
-    val date: LocalDate
+    val date: LocalDate,
+    val location: String
 ): Comparable<Lecture> {
     var isKlausur = false
         private set
@@ -19,8 +20,9 @@ class Lecture(
         startTime: LocalTime,
         endTime: LocalTime,
         date: LocalDate,
+        location: String,
         isKlausur: Boolean
-    ) : this(title, lecturer, startTime, endTime, date) {
+    ) : this(title, lecturer, startTime, endTime, date, location) {
         this.isKlausur = isKlausur
     }
 
@@ -31,7 +33,7 @@ class Lecture(
     }
 
     override fun hashCode(): Int {
-        val uniqueIdentifier = title + lecturer + startTime.toString() + endTime.toString() + date.toString()
+        val uniqueIdentifier = title + lecturer + startTime.toString() + endTime.toString() + date.toString() + location
         return uniqueIdentifier.hashCode()
     }
 
@@ -48,6 +50,7 @@ class Lecture(
         if (startTime != other.startTime) return false
         if (endTime != other.endTime) return false
         if (date != other.date) return false
+        if (location != other.location) return false
 
         return true
     }

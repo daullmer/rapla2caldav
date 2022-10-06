@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
     println("[CalDav]: The calendar contains ${caldavLectures.count()} lectures")
 
     // get all Rapla Lectures
-    val raplaLectures: ArrayList<Lecture> = ArrayList()
+    var raplaLectures: ArrayList<Lecture> = ArrayList()
     while (startDate < endDate) {
         val scraper = Scraper(UrlGenerator.getRaplaUrlForDate(raplaKey, startDate))
         val lectures = scraper.lectureDaysFromPage
@@ -28,6 +28,9 @@ fun main(args: Array<String>) {
         startDate = startDate.plusDays(7)
     }
 
+    // remove Klausurwoche Blockers
+    raplaLectures = ArrayList(raplaLectures.filter { lecture -> lecture.title != "Klausurwoche" })
+
     // Nach Datum sortieren
     raplaLectures.sort()
     caldavLectures.sort()
@@ -35,7 +38,7 @@ fun main(args: Array<String>) {
     val toDelete = caldavLectures subtract raplaLectures
     val toAdd = raplaLectures subtract caldavLectures
 
-    println("Rapla and the calendar contain " + (raplaLectures union caldavLectures).count() + " same lectures")
+    println("Rapla and the calendar contain " + (raplaLectures intersect caldavLectures).count() + " same lectures")
     println("We need to add ${toAdd.count()} lectures")
     println("We need to remove ${toDelete.count()} lectures")
 

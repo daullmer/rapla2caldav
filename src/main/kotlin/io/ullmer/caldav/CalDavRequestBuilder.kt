@@ -44,7 +44,7 @@ class CalDavRequestBuilder {
                 lecture.date
             )
         }
-             LOCATION:online
+             LOCATION:${lecture.location}
              END:VEVENT
              END:VCALENDAR
              """.trimIndent()

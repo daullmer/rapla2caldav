@@ -16,6 +16,7 @@ class CalDavParser {
             var date = LocalDate.of(0, 1, 1)
             var title = ""
             var descriptionLecturer = ""
+            var location = ""
             val calendarEvent = matcher.group().replace("\\", "")
             val summaryMatcher = Pattern.compile("SUMMARY:[^\n]*").matcher(calendarEvent)
             if (summaryMatcher.find()) {
@@ -24,6 +25,10 @@ class CalDavParser {
             val descriptionMatcher = Pattern.compile("DESCRIPTION:[^\n]*").matcher(calendarEvent)
             if (descriptionMatcher.find()) {
                 descriptionLecturer = descriptionMatcher.group().substring(12)
+            }
+            val locationMatcher = Pattern.compile("LOCATION:[^\n]*").matcher(calendarEvent)
+            if (locationMatcher.find()) {
+                location = locationMatcher.group().substring(9)
             }
             val startTimeMatcher = Pattern.compile("(DTSTART[^\n]*)", Pattern.DOTALL).matcher(calendarEvent)
             if (startTimeMatcher.find()) {
@@ -40,7 +45,7 @@ class CalDavParser {
                     endTime = getTimeFromString(endTimeString)
                 }
             }
-            lectures.add(Lecture(title, descriptionLecturer, startTime, endTime, date))
+            lectures.add(Lecture(title, descriptionLecturer, startTime, endTime, date, location))
         }
         return lectures
     }

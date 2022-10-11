@@ -31,12 +31,14 @@ class Scraper(url: String?) {
                 if (isFeiertag) {
                     continue
                 }
+
+                val title = getTitleFromElement(element)
+                val resources = getResourcesFromElement(element)
+                val location = getRoomOrOnline(resources)
                 val times = getTimesForLectureElement(element)
                 val dayOfTheWeek = element.select("div")[1].text().substring(0, 2)
                 val dateOfLecture = firstDateOfWeek!!.plusDays(numberOfDaysFromMonday(dayOfTheWeek).toLong())
                 val isKlausur: Boolean = element.attributes()["style"] == "background-color:#F79F81"
-                val title = getTitleFromElement(element)
-                val location = getLocationFromElement(element)
                 val lecture = Lecture(
                     title,
                     getLecturerFromElement(element),
@@ -47,10 +49,6 @@ class Scraper(url: String?) {
                     isKlausur
                 )
                 lecture.cleanName()
-
-                if (lecture.title == "Wahl- und Zusatzfächer") {
-                    continue
-                }
 
                 lectures.add(lecture)
             }
@@ -104,12 +102,8 @@ class Scraper(url: String?) {
             .toTypedArray()[0].substring(13)
     }
 
-    private fun getLocationFromElement(element: Element): String {
-        val resources = element.select("span.resource")
-        if (resources.count() != 2) {
-            return "Online"
-        }
-        return resources[1].text()
+    private fun getResourcesFromElement(element: Element): List<String> {
+        return element.select("span.resource").map { it.text() }
     }
 
     private fun getLecturerFromElement(element: Element): String {
@@ -119,8 +113,14 @@ class Scraper(url: String?) {
         return lecturer
     }
 
-    private fun getDayOfWeekFromLectureElement(element: Element): String {
-        return element.select("div")[1].text().substring(0, 2)
+    private fun getRoomOrOnline(resources: List<String>): String {
+        return when (resources.count()) {
+            // if only one resource, this is always the course; so this is an online course
+            1 -> "online"
+            // when two resources, return the one that doesn't contain the course
+            2 -> resources.first { !it.contains("STG-") }
+            else -> {"???"}
+        }
     }
 
     private fun getTimesForLectureElement(element: Element): Array<LocalTime> {

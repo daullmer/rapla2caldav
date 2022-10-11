@@ -30,6 +30,8 @@ fun main(args: Array<String>) {
 
     // remove Klausurwoche Blockers
     raplaLectures = ArrayList(raplaLectures.filter { lecture -> lecture.title != "Klausurwoche" })
+    // remove Wahlfach
+    raplaLectures = ArrayList(raplaLectures.filter { lecture -> lecture.title != "Wahl- und Zusatzfächer" })
 
     // Nach Datum sortieren
     raplaLectures.sort()

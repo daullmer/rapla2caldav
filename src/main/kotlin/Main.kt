@@ -6,6 +6,8 @@ import io.ullmer.rapla.UrlGenerator
 import java.time.LocalDate
 
 fun main(args: Array<String>) {
+    // umgehen von komischen DHBW SSL Problem
+    System.setProperty("com.sun.security.enableAIAcaIssuers", "true")
     // setup
     val raplaKey = System.getenv("RAPLA_KEY")
     var startDate = LocalDate.parse(System.getenv("DATE_START"))

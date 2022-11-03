@@ -15,7 +15,7 @@ class Scraper(url: String?) {
 
     init {
         try {
-            document = Jsoup.connect(url.toString()).get()
+            document = Jsoup.connect(url.toString()).sslSocketFactory(SSLHelperKotlin.socketFactory()).get()
             firstDateOfWeek = getDate(document)
         } catch (e: IOException) {
             e.printStackTrace()

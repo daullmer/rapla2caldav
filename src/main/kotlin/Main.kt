@@ -13,6 +13,7 @@ fun main(args: Array<String>) {
     var startDate = LocalDate.parse(System.getenv("DATE_START"))
     val endDate = LocalDate.parse(System.getenv("DATE_END"))
     val credentials = CalDavCredentials(System.getenv("CALDAV_URL"), System.getenv("CALDAV_USER"),System.getenv("CALDAV_PASSWORD"))
+    val ignoreList = System.getenv("IGNORE_LIST").split(';')
     val client = CalDavClient(credentials)
 
     // get all CalDav Lectures
@@ -30,10 +31,10 @@ fun main(args: Array<String>) {
         startDate = startDate.plusDays(7)
     }
 
-    // remove Klausurwoche Blockers
-    raplaLectures = ArrayList(raplaLectures.filter { lecture -> lecture.title != "Klausurwoche" })
-    // remove Wahlfach
-    raplaLectures = ArrayList(raplaLectures.filter { lecture -> lecture.title != "Wahl- und Zusatzfächer" })
+    // remove all Lectures in the ignore list
+    ignoreList.forEach { ignore ->
+        raplaLectures = ArrayList(raplaLectures.filter { lecture ->  lecture.title != ignore })
+    }
 
     // Nach Datum sortieren
     raplaLectures.sort()

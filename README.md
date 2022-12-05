@@ -20,5 +20,5 @@ The container will start and do an initial sync. To run in periodically, you can
 It will start the container every hour between 7 and 19 o'clock. Outside these hours, it is very unlikely that your schedule will change.
 
 ## Get a sharable URL of the calendar
-In the OwnCloud calendar UI, click on the share icon next to your calendar. Then click the plus and the three dots and select "Abonnement-Link copieren". You can add this URL in your phone calendar or share it publicly with your class.
+In the OwnCloud calendar UI, click on the share icon next to your calendar. Then click the plus and the three dots and select "Abonnement-Link kopieren". You can add this URL in your phone calendar or share it publicly with your class.
 [This](https://www.techrepublic.com/article/how-to-subscribe-to-and-manage-public-calendars-in-ios-15/) is a handy example of how to add it to your iPhone.

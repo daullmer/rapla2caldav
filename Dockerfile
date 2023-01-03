@@ -9,4 +9,4 @@ RUN mkdir /app
 
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/rapla2caldav.jar
 
-ENTRYPOINT ["java", "-jar"," /app/rapla2caldav.jar"]
+ENTRYPOINT ["java", "-jar", "/app/rapla2caldav.jar"]

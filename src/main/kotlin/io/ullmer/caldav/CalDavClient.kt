@@ -7,6 +7,7 @@ import org.apache.http.impl.client.HttpClients
 import org.apache.http.util.EntityUtils
 import java.io.IOException
 import java.lang.Exception
+import java.time.LocalDate
 
 class CalDavClient(credentials: CalDavCredentials) {
     private var davCredentials: CalDavCredentials = credentials
@@ -16,12 +17,13 @@ class CalDavClient(credentials: CalDavCredentials) {
         return HttpClients.custom().build()
     }
 
-    fun getCalendarItems(): ArrayList<Lecture> {
+    fun getCalendarItems(startDate: LocalDate, endDate: LocalDate): ArrayList<Lecture> {
         val httpClient = buildHttpClient()
         val request: HttpUriRequest = requestBuilder.buildReportRequest(davCredentials)
         return try {
             val response = httpClient.execute(request)
-            CalDavParser().parse(EntityUtils.toString(response.entity))
+            val lectures = CalDavParser().parse(EntityUtils.toString(response.entity))
+            ArrayList(lectures.filter { lecture -> lecture.date.isAfter(startDate) && lecture.date.isBefore(endDate) })
         } catch (e: IOException) {
             e.printStackTrace()
             ArrayList()

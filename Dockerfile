@@ -1,18 +1,12 @@
-# Part 1: Build the app using Maven
-FROM maven:3-eclipse-temurin-17
+FROM gradle:jdk8 AS build
+COPY --chown=gradle:gradle . /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle build --no-daemon
 
-## download dependencies
-ADD pom.xml /
-RUN mvn verify clean
-## build after dependencies are down so it wont redownload unless the POM changes
-ADD . /
-RUN mvn package
+FROM openjdk:8-jre-slim
 
-# Part 2: use the JAR file used in the first part and copy it across ready to RUN
-FROM openjdk:11
-WORKDIR /root/
-## COPY packaged JAR file and rename as app.jar
-## → this relies on your MAVEN package command building a jar
-## that matches *-jar-with-dependencies.jar with a single match
-COPY --from=0 /target/*-jar-with-dependencies.jar app.jar
-ENTRYPOINT ["java","-jar","./app.jar"]
+RUN mkdir /app
+
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/rapla2caldav.jar
+
+ENTRYPOINT ["java", "-jar"," /app/rapla2caldav.jar"]

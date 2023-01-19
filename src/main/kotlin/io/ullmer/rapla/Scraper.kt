@@ -99,7 +99,7 @@ class Scraper(url: String?) {
 
     private fun getTitleFromElement(element: Element): String {
         return element.select("a[href^=#]").text().split(" erstellt am".toRegex()).dropLastWhile { it.isEmpty() }
-            .toTypedArray()[0].substring(13)
+            .toTypedArray()[0].substring(13).replace("\"", "")
     }
 
     private fun getResourcesFromElement(element: Element): List<String> {

@@ -47,14 +47,6 @@ fun main() {
     println("We need to add ${toAdd.count()} lectures")
     println("We need to remove ${toDelete.count()} lectures")
 
-    // generate diff and send with Mail
-    if (enableMail && (toAdd.isNotEmpty() || toDelete.isNotEmpty())) {
-        val diffGen = DiffGenerator()
-        val diff = diffGen.getChangedText(toAdd, toDelete)
-        diffGen.sendMail(diff)
-    }
-
-
     // Delete removed Lectures from CalDav
     for (delete in toDelete) {
         client.removeCalendarItem(delete)
@@ -65,5 +57,12 @@ fun main() {
     for (add in toAdd) {
         client.createCalendarItem(add)
         println("[CalDav]: Adding ${add.title} on ${add.date}")
+    }
+
+    // generate diff and send with Mail
+    if (enableMail && (toAdd.isNotEmpty() || toDelete.isNotEmpty())) {
+        val diffGen = DiffGenerator()
+        val diff = diffGen.getChangedText(toAdd, toDelete)
+        diffGen.sendMail(diff)
     }
 }

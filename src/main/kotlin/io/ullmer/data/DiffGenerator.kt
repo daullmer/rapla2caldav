@@ -6,26 +6,40 @@ import com.sendgrid.helpers.mail.objects.Content
 import com.sendgrid.helpers.mail.objects.Email
 import com.sendgrid.helpers.mail.objects.Personalization
 import java.io.IOException
+import java.time.format.DateTimeFormatter
 
 
 class DiffGenerator {
     fun getChangedText(toAdd: Set<Lecture>, toDelete: Set<Lecture>): String {
         val builder = StringBuilder()
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
         builder.append("Es gab Änderungen an folgenden Vorlesungen: <br><br>")
 
         builder.append("<h2>Neue Vorlesungen</h2>")
 
         for (lecture in toAdd) {
-            builder.append("${lecture.title} am ${lecture.date} von ${lecture.startTime} bis ${lecture.endTime}")
-            builder.append("<br>")
+            builder.appendLine("<h4>${lecture.title} am ${lecture.date.format(dateFormatter)}:</h4>")
+                .appendLine("<ul>")
+                .appendLine("<li>${lecture.startTime} bis ${lecture.endTime} Uhr</li>")
+                .appendLine("<li>Raum: ${lecture.location}</li>")
+                .appendLine("<li>Dozent: ${lecture.lecturer}</li>")
+                .appendLine("</ul>")
+                .appendLine("<br>")
+                .appendLine("<br>")
         }
 
         builder.append("<h2>Entfernte Vorlesungen</h2>")
 
         for (lecture in toDelete) {
-            builder.append("${lecture.title} am ${lecture.date} von ${lecture.startTime} bis ${lecture.endTime}")
-            builder.append("<br>")
+            builder.appendLine("<h4>${lecture.title} am ${lecture.date.format(dateFormatter)}:</h4>")
+                .appendLine("<ul>")
+                .appendLine("<li>${lecture.startTime} bis ${lecture.endTime} Uhr</li>")
+                .appendLine("<li>Raum: ${lecture.location}</li>")
+                .appendLine("<li>Dozent: ${lecture.lecturer}</li>")
+                .appendLine("</ul>")
+                .appendLine("<br>")
+                .appendLine("<br>")
         }
 
         return builder.toString()

@@ -34,7 +34,8 @@ class Scraper(url: String?) {
 
                 val title = getTitleFromElement(element)
                 val resources = getResourcesFromElement(element)
-                val location = getRoomOrOnline(resources)
+                val backgroundColor = element.attr("style")
+                val location = getRoomOrOnline(resources, backgroundColor)
                 val times = getTimesForLectureElement(element)
                 val dayOfTheWeek = element.select("div")[1].text().substring(0, 2)
                 val dateOfLecture = firstDateOfWeek!!.plusDays(numberOfDaysFromMonday(dayOfTheWeek).toLong())
@@ -113,10 +114,13 @@ class Scraper(url: String?) {
         return lecturer
     }
 
-    private fun getRoomOrOnline(resources: List<String>): String {
+    private fun getRoomOrOnline(resources: List<String>, backgroundColor: String): String {
+        // online courses have a different background
+        if (backgroundColor.contains("#9999ff")) {
+            return "online"
+        }
+
         return when (resources.count()) {
-            // if only one resource, this is always the course; so this is an online course
-            1 -> "online"
             // when two resources, return the one that doesn't contain the course
             2 -> resources.first { !it.contains("STG-") }
             else -> {"???"}

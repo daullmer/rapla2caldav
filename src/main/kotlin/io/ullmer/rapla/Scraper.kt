@@ -121,8 +121,9 @@ class Scraper(url: String?) {
         }
 
         return when (resources.count()) {
+            1 -> "online"
             // when two resources, return the one that doesn't contain the course
-            2 -> resources.first { !it.contains("STG-") }
+            2 -> resources.firstOrNull { !it.contains("STG-") } ?: "???"
             else -> {"???"}
         }
     }

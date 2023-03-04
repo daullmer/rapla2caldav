@@ -73,8 +73,7 @@ class Scraper(url: String?) {
         val day = element!!.select("select[name=day]").select("option[selected]").text().toInt()
         val monthName = element.select("select[name=month]").select("option[selected]").text()
         val year = element.select("select[name=year]").select("option[selected]").text().toInt()
-        val month: Int
-        month = when (monthName) {
+        val month: Int = when (monthName) {
             "Januar" -> 1
             "Februar" -> 2
             "März" -> 3
@@ -120,12 +119,14 @@ class Scraper(url: String?) {
             return "online"
         }
 
-        return when (resources.count()) {
-            1 -> "online"
-            // when two resources, return the one that doesn't contain the course
-            2 -> resources.firstOrNull { !it.contains("STG-") } ?: "???"
-            else -> {"???"}
+        // remove all courses
+        val filtered = resources.filter { !it.contains("STG-") }
+
+        if (filtered.isEmpty()) {
+            return "???"
         }
+
+        return filtered.joinToString(separator = ", ")
     }
 
     private fun getTimesForLectureElement(element: Element): Array<LocalTime> {

@@ -1,4 +1,8 @@
 # Rapla2CalDav
+> **Warning**
+> This project is no longer maintained, because I don't need it anymore. It should however continue to work, unless the Rapla Web interface changes significantly.
+
+
 This is a project to automatically sync a Rapla schedule to a CalDav calendar.
 It even checks if the schedule changed if you run this project periodically!
 
